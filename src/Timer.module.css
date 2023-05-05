@@ -1,0 +1,41 @@
+.timer {
+  min-width: 350px;
+  width: 100%;
+  box-shadow: 0 0 5px 0 #fff;
+  border-radius: 20px;
+  padding: 20px 30px;
+}
+
+.timer-title {
+  font-size: 40px;
+  margin: 15px 0;
+  text-align: center;
+}
+
+.timer-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.timer-info {
+  text-align: center;
+  line-height: 1.1;
+  font-size: 60px;
+  margin: 20px 0;
+}
+
+@media screen and (max-width: 750px) {
+  .timer {
+    box-shadow: none;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .timer-buttons {
+    flex-direction: column;
+    width: 70%;
+    align-items: center;
+    margin: 0 auto;
+  }
+}
+

@@ -1,0 +1,50 @@
+.timer-time {
+  display: grid;
+  grid-template: 1fr / 1fr 1fr;
+  align-items: center;
+  margin: 20px 0px;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.timer-time p {
+  margin: 0;
+}
+
+.timer-time-buttons {
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+}
+
+.timer-time__label {
+  display: flex;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.timer-time__input {
+  padding: 5px 15px;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: 900;
+  text-align: end;
+  color: rgba(236, 83, 83, 0.87);
+}
+
+.timer-time__input::-webkit-inner-spin-button {
+  display: none;
+}
+
+.timer-time-buttons__btn {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 5px 10px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: black;
+  cursor: pointer;
+  transition: all 0.3s;
+}
