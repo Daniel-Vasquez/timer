@@ -1,64 +1,67 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TimeButton } from "./components/TimeButton";
 import { TimeOptions } from "./components/TimeOptions";
 import styleTimer from './Timer.module.css'
 
-
-
 export function Timer() {
-  const [horas, setHoras] = useState(0);
-  const [minutos, setMinutos] = useState(0);
-  const [segundos, setSegundos] = useState(0);
-  const [tiempoTotal, setTiempoTotal] = useState(0);
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+  const [totalTime, setTotalTime] = useState(0);
   const [intervaloId, setIntervaloId] = useState(null);
+  const [isPaused, setIsPaused] = useState(false);
 
-  const iniciarTemporizador = () => {
-    const tiempoEnSegundos =
-      Math.floor(horas) * 3600 +
-      Math.floor(minutos) * 60 +
-      Math.floor(segundos);
+  useEffect(() => {
+    if (totalTime === 0) {
+      clearInterval(intervaloId);
+    }
+  }, [totalTime]);
 
-    setTiempoTotal(tiempoEnSegundos);
+  const startTimer = (timeUsers) => {
+    const timeInSeconds =
+      Math.floor(hours) * 3600 +
+      Math.floor(minutes) * 60 +
+      Math.floor(seconds);
+    
+    if (isPaused) {
+      setTotalTime(timeUsers);
+    } else {
+      setTotalTime(timeInSeconds);
+    }
 
     const id = setInterval(() => {
-      setTiempoTotal((tiempoTotal) =>
+      setTotalTime((tiempoTotal) =>
         tiempoTotal === 0 ? 0 : tiempoTotal - 1
       );
+      
     }, 1000);
-
+    
+    setIsPaused(false)
     setIntervaloId(id);
   };
 
-  const detenerTemporizador = () => {
+  const stopTimer = () => {
     clearInterval(intervaloId);
+    setIsPaused(true)
   };
 
-  const reiniciarTemporizador = () => {
-    detenerTemporizador();
-    setHoras(0);
-    setMinutos(0);
-    setSegundos(0);
-    setTiempoTotal(0);
+  const restartTimer = () => {
+    stopTimer();
+    setHours(0);
+    setMinutes(0);
+    setSeconds(0);
+    setTotalTime(0);
+    setIsPaused(false)
   };
 
-  const segundosMostrar = tiempoTotal % 60;
-  const minutosMostrar = Math.floor(tiempoTotal / 60) % 60;
-  const horasMostrar = Math.floor(tiempoTotal / 3600);
+  const resumeTimer = () => {
+    startTimer(totalTime)
+    setIsPaused(false)
+  }
 
-  const timeList = [
-    {
-      nameFn: iniciarTemporizador,
-      text: 'Iniciar'
-    },
-    {
-      nameFn: detenerTemporizador,
-      text: 'Detener'
-    },
-    {
-      nameFn: reiniciarTemporizador,
-      text: 'Reiniciar'
-    },
-  ]
+  const secondsToShow = totalTime % 60;
+  const minutesToShow = Math.floor(totalTime / 60) % 60;
+  const hourstoShow = Math.floor(totalTime / 3600);
 
   return (
     <div className={styleTimer.timer}>
@@ -68,65 +71,56 @@ export function Timer() {
       <div>
         <TimeButton
           text='Horas:'
-          time={horas}
-          setTime={setHoras}
+          time={hours}
+          setTime={setHours}
         />
 
         <TimeButton
           text='Minutos:'
-          time={minutos}
-          setTime={setMinutos}
+          time={minutes}
+          setTime={setMinutes}
         />
 
         <TimeButton
           text='Segundos:'
-          time={segundos}
-          setTime={setSegundos}
+          time={seconds}
+          setTime={setSeconds}
         />
       </div>
 
       <div className={styleTimer["timer-buttons"]}>
-        {/* {timeList.map(({ nameFn, text }, index) => {
-          return (
-            <TimeOptions
-              key={index}
-              fn={nameFn}
-              text={text}
-              horas={horas}
-              minutos={minutos}
-              segundos={segundos}
-            />
-          )
-        })} */}
-
+        
         <TimeOptions
-          fn={iniciarTemporizador}
+          fn={startTimer}
           text='Iniciar'
-          horas={horas}
-          minutos={minutos}
-          segundos={segundos}
+          horas={hours}
+          minutos={minutes}
+          segundos={seconds}
+          isPause={isPaused}
+          totalTime={totalTime}
         />
         <TimeOptions
-          fn={detenerTemporizador}
-          text='Detener'
-          horas={horas}
-          minutos={minutos}
-          segundos={segundos}
+          fn={!isPaused ? stopTimer : () => resumeTimer(totalTime)}
+          text={!isPaused ? 'Detener' : 'Reanudar'}
+          horas={hours}
+          minutos={minutes}
+          segundos={seconds}
         />
         <TimeOptions
-          fn={reiniciarTemporizador}
+          fn={restartTimer}
           text='Reiniciar'
-          horas={horas}
-          minutos={minutos}
-          segundos={segundos}
+          horas={hours}
+          minutos={minutes}
+          segundos={seconds}
+          isPause={isPaused}
         />
       </div>
 
       <div>
         <h1 className={styleTimer["timer-info"]}>
-          {horasMostrar < 10 ? `0${horasMostrar}` : horasMostrar}:
-          {minutosMostrar < 10 ? `0${minutosMostrar}` : minutosMostrar}:
-          {segundosMostrar < 10 ? `0${segundosMostrar}` : segundosMostrar}
+          {hourstoShow < 10 ? `0${hourstoShow}` : hourstoShow}:
+          {minutesToShow < 10 ? `0${minutesToShow}` : minutesToShow}:
+          {secondsToShow < 10 ? `0${secondsToShow}` : secondsToShow}
         </h1>
       </div>
     </div>
