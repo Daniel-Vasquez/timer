@@ -10,10 +10,12 @@ export function Timer() {
   const [totalTime, setTotalTime] = useState(0);
   const [intervaloId, setIntervaloId] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [timerStarted, setTimerStarted] = useState(false);
 
   useEffect(() => {
     if (totalTime === 0) {
       clearInterval(intervaloId);
+      setTimerStarted(false)
     }
   }, [totalTime]);
 
@@ -38,6 +40,7 @@ export function Timer() {
     
     setIsPaused(false)
     setIntervaloId(id);
+    setTimerStarted(true)
   };
 
   const stopTimer = () => {
@@ -52,6 +55,7 @@ export function Timer() {
     setSeconds(0);
     setTotalTime(0);
     setIsPaused(false)
+    setTimerStarted(false)
   };
 
   const resumeTimer = () => {
@@ -62,7 +66,7 @@ export function Timer() {
   const secondsToShow = totalTime % 60;
   const minutesToShow = Math.floor(totalTime / 60) % 60;
   const hourstoShow = Math.floor(totalTime / 3600);
-
+  
   return (
     <div className={styleTimer.timer}>
       <h2 className={styleTimer["timer-title"]}>
@@ -73,18 +77,21 @@ export function Timer() {
           text='Horas:'
           time={hours}
           setTime={setHours}
+          admittedTime='23'
         />
 
         <TimeButton
           text='Minutos:'
           time={minutes}
           setTime={setMinutes}
+          admittedTime='59'
         />
 
         <TimeButton
           text='Segundos:'
           time={seconds}
           setTime={setSeconds}
+          admittedTime='59'
         />
       </div>
 
@@ -98,6 +105,7 @@ export function Timer() {
           segundos={seconds}
           isPause={isPaused}
           totalTime={totalTime}
+          startingTimer={!timerStarted}
         />
         <TimeOptions
           fn={!isPaused ? stopTimer : () => resumeTimer(totalTime)}
@@ -105,6 +113,7 @@ export function Timer() {
           horas={hours}
           minutos={minutes}
           segundos={seconds}
+          startingTimer={timerStarted}
         />
         <TimeOptions
           fn={restartTimer}
@@ -113,6 +122,7 @@ export function Timer() {
           minutos={minutes}
           segundos={seconds}
           isPause={isPaused}
+          startingTimer={timerStarted}
         />
       </div>
 

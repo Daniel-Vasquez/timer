@@ -8,6 +8,7 @@
   background-color: black;
   cursor: pointer;
   transition: all 0.3s;
+  min-width: 130px;
 }
 
 .button:hover, 

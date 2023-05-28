@@ -30,7 +30,7 @@
   }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 500px) {
   .timer-buttons {
     flex-direction: column;
     width: 70%;
